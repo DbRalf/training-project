@@ -13,6 +13,27 @@ core idea for mesasges:
 */
 
 
+enum drive_operation {
+
+    THROTTLE_VECTOR = 1,
+    STEER_VECTOR,
+    BRAKE_VECTOR,
+    REQ_ENGINE_STATE,
+    OP_RAMP,
+    CL_RAMP,
+    HORN_STATE,
+    SMOKE_STATE,
+    LOW_BEAM,
+    HIGH_BEAM,
+    CAT_EYES,
+    FORWARD_CMD,
+    NATURAL_CMD,
+    REVERSE_CMD,
+    ON_OVERRIDE
+};
+
+
+
 #pragma pack(push, 1)
 
 // DRIVE_CMD, 64 bit, HLC to LLC, Address hightolow :contentReference[oaicite:0]{index=0}
@@ -80,7 +101,7 @@ public:
 
     void print();   // done
     void init();    // what are we initializing 
-    bool get();     // get message? get struct? - bool for seccussfull execution
+    int get(int request);     // get message? get struct? - bool for seccussfull execution
     bool set();     // set a new message or a small portion - bool for seccussfull execution
 private:
     

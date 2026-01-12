@@ -8,15 +8,18 @@ DRIVE_CMD::DRIVE_CMD()
     message = {};
 }
 
+
 DRIVE_CMD::~DRIVE_CMD()
 {
 }
 
+// you know nothing john snow
 void DRIVE_CMD::init()
 {
     message = {};
 }
 
+// print the entire message struct
 void DRIVE_CMD::print()
 {
     std::cout << "throttle_vector: " << message.throttle_vector << '\n';
@@ -39,8 +42,7 @@ void DRIVE_CMD::print()
     std::cout << "message_counter: " << static_cast<int>(message.message_counter) << '\n';
 }
 
-
-
+// set a sew value in the struct based on keyboard input
 bool DRIVE_CMD::set(){
 
     keyboard_input ter1;
@@ -109,13 +111,38 @@ bool DRIVE_CMD::set(){
         message.brake_light_allowed = !message.brake_light_allowed;
         break;
     case '\e':
-        std::exit(0);
         return false;
-    default:
-        break;
     }
 
 
     return true;
 
 }
+
+// get the value from the relevant requesrt
+int DRIVE_CMD::get(int request){
+
+    switch (request)
+    {
+    case THROTTLE_VECTOR: return message.throttle_vector;
+    case STEER_VECTOR: return message.steer_vector;
+    case BRAKE_VECTOR: return message.brake_vector;
+    case REQ_ENGINE_STATE: return message.required_engine_state;
+    case OP_RAMP: return message.open_rear_ramp;
+    case CL_RAMP: return message.close_rear_ramp;
+    case HORN_STATE: return message.required_horn_state;
+    case SMOKE_STATE: return message.required_smoke_state;
+    case LOW_BEAM: return message.lights_low_beams;
+    case HIGH_BEAM: return message.lights_high_beams;
+    case CAT_EYES: return message.lights_cat_eyes;
+    case FORWARD_CMD: return message.fnr_forward_cmd;
+    case NATURAL_CMD: return message.fnr_neutral_cmd;
+    case REVERSE_CMD: return message.fnr_reverse_cmd;
+    case ON_OVERRIDE: return message.engine_on_override;
+
+    default:
+        std::cerr << "unknown drive command get request\n";
+    }
+    return -1;
+}
+
