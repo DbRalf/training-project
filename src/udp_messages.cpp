@@ -146,3 +146,42 @@ int DRIVE_CMD::get(int request){
     return -1;
 }
 
+
+std::array<std::byte,8> DRIVE_CMD::encode(){
+
+    std::array<std::byte,8> out {}; // the return array
+
+    // litlle endian to the throttle vector
+    out[0] = static_cast<std::byte>(message.throttle_vector >> 8 & 0xFF);
+    out[1] = static_cast<std::byte>(message.throttle_vector      & 0xFF);
+    // litlle endian to the steer vector
+    out[2] = static_cast<std::byte>(message.steer_vector >> 8 & 0xFF);
+    out[3] = static_cast<std::byte>(message.steer_vector      & 0xFF);
+    // litlle endian to the brake vector
+    out[4] = static_cast<std::byte>(message.brake_vector >> 8 & 0xFF);
+    out[5] = static_cast<std::byte>(message.brake_vector      & 0xFF);
+
+    out[6] = static_cast<std::byte>(
+             ((message.required_engine_state & 1) << 0) |
+             ((message.open_rear_ramp        & 1) << 1) |
+             ((message.close_rear_ramp       & 1) << 2) |
+             ((message.required_horn_state   & 1) << 3) |
+             ((message.required_smoke_state  & 1) << 4) |
+             ((message.lights_low_beams      & 1) << 5) |
+             ((message.lights_high_beams     & 1) << 6) |
+             ((message.lights_cat_eyes       & 1) << 7)
+            );
+    
+    out[7] = static_cast<std::byte>(
+             ((message.brake_light_allowed   & 1) << 0) |
+             ((message.fnr_forward_cmd       & 1) << 1) |
+             ((message.fnr_neutral_cmd       & 1) << 2) |
+             ((message.fnr_reverse_cmd       & 1) << 3) |
+             ((message.engine_on_override    & 1) << 4)
+            );   
+    
+    return out;
+}
+
+
+    

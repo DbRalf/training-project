@@ -3,6 +3,7 @@
 
 
 #include <cstdint>
+#include <array>
 #include <keyboard_input.h>
 
 /*
@@ -103,6 +104,7 @@ public:
     void init();    // what are we initializing 
     int get(int request);     // get message? get struct? - bool for seccussfull execution
     bool set();     // set a new message or a small portion - bool for seccussfull execution
+    std::array<std::byte,8> encode();
 private:
     
     DRIVE_CMD_HTL message {};
