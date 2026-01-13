@@ -4,7 +4,7 @@ hardware in the loop integration between the Cognata station and the Elbit Syste
 Implement the UDP Interface for data and commands according to M113 G12 Platform CAN bus protocol
 
 ## what's in here
-### UDP soket handler 
+### UDP socket handler 
 - Files
     'include/udp_socket.h'
     'src/udp_socket.cpp'
@@ -12,9 +12,9 @@ Implement the UDP Interface for data and commands according to M113 G12 Platform
 - Responsibilities
     
     - create a server and client socket
-    - handle recive and send
+    - handle receive and send
 
-### UDP messeage:
+### UDP message:
 - Files 
     'include/udp_message.h'
     'src/udp_message.cpp'
@@ -32,10 +32,12 @@ Implement the UDP Interface for data and commands according to M113 G12 Platform
 
  ## Build
 
- makdir -p build
+ '''bash
+ mkdir -p build
  cd build
  cmake ..
  cmake --build .
+ '''
 
 
  ## example
