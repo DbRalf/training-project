@@ -32,12 +32,12 @@ Implement the UDP Interface for data and commands according to M113 G12 Platform
 
  ## Build
 
- '''bash
+```bash
  mkdir -p build
  cd build
  cmake ..
  cmake --build .
- '''
+```
 
 
  ## example
