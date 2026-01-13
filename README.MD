@@ -10,6 +10,9 @@ Implement the UDP Interface for data and commands according to M113 G12 Platform
     'src/udp_socket.cpp'
 
 - Responsibilities
+    
+    - create a server and client socket
+    - handle recive and send
 
 ### UDP messeage:
 - Files 
@@ -19,7 +22,7 @@ Implement the UDP Interface for data and commands according to M113 G12 Platform
 - Responsibilities
     
     - set: create a message from keyboard input
-    - get pass enum for a specific value
+    - get: pass enum for a specific value
     - encode: encodes the struct to byte array
     - decode: decodes a byte array to a struct
     - print: prints the internal struct
