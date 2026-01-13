@@ -59,7 +59,7 @@ struct DRIVE_CMD_HTL
     std::uint16_t engine_on_override    : 1;   // 0..1
     std::uint16_t spare                 : 3;   // must be 0
 
-    std::uint8_t  message_counter;            // 0..255
+    std::uint8_t  message_counter;             // 0..255
 };
 
 static_assert(sizeof(DRIVE_CMD_HTL) == 8, "DRIVE_CMD_HTL must be 8 bytes");
@@ -86,7 +86,7 @@ struct PLATFORM1_LTH
     std::uint16_t estop1_alive       : 1;   // 0..1
     std::uint16_t estop2_alive       : 1;   // 0..1
 
-    std::uint8_t  message_counter;         // 0..255
+    std::uint8_t  message_counter;          // 0..255
 };
 
 static_assert(sizeof(PLATFORM1_LTH) == 8, "PLATFORM1_LTH must be 8 bytes");
@@ -105,10 +105,14 @@ public:
     int get(int request);     // get message? get struct? - bool for seccussfull execution
     bool set();     // set a new message or a small portion - bool for seccussfull execution
     std::array<std::byte,8> encode();
+    void decode (std::array<std::byte,8>);
 private:
     
     DRIVE_CMD_HTL message {};
 
 };
+
+
+
 
 #endif

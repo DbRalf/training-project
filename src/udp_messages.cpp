@@ -146,20 +146,19 @@ int DRIVE_CMD::get(int request){
     return -1;
 }
 
-
 std::array<std::byte,8> DRIVE_CMD::encode(){
 
     std::array<std::byte,8> out {}; // the return array
 
     // litlle endian to the throttle vector
-    out[0] = static_cast<std::byte>(message.throttle_vector >> 8 & 0xFF);
-    out[1] = static_cast<std::byte>(message.throttle_vector      & 0xFF);
+    out[0] = static_cast<std::byte>(message.throttle_vector      & 0xFF);
+    out[1] = static_cast<std::byte>(message.throttle_vector >> 8 & 0xFF);
     // litlle endian to the steer vector
-    out[2] = static_cast<std::byte>(message.steer_vector >> 8 & 0xFF);
-    out[3] = static_cast<std::byte>(message.steer_vector      & 0xFF);
+    out[2] = static_cast<std::byte>(message.steer_vector         & 0xFF);
+    out[3] = static_cast<std::byte>(message.steer_vector    >> 8 & 0xFF);
     // litlle endian to the brake vector
-    out[4] = static_cast<std::byte>(message.brake_vector >> 8 & 0xFF);
-    out[5] = static_cast<std::byte>(message.brake_vector      & 0xFF);
+    out[4] = static_cast<std::byte>(message.brake_vector         & 0xFF);
+    out[5] = static_cast<std::byte>(message.brake_vector    >> 8 & 0xFF);
 
     out[6] = static_cast<std::byte>(
              ((message.required_engine_state & 1) << 0) |
@@ -184,4 +183,29 @@ std::array<std::byte,8> DRIVE_CMD::encode(){
 }
 
 
-    
+void DRIVE_CMD::decode (std::array<std::byte,8> enc_mes){
+
+
+    // decode little endian
+    message.throttle_vector = (std::to_integer<uint16_t>(enc_mes[0])) | (std::to_integer<uint16_t>(enc_mes[1]) << 8);
+    message.steer_vector    = (std::to_integer<uint16_t>(enc_mes[2])) | (std::to_integer<uint16_t>(enc_mes[3]) << 8);
+    message.brake_vector    = (std::to_integer<uint16_t>(enc_mes[4])) | (std::to_integer<uint16_t>(enc_mes[5]) << 8);
+
+    // decode bit flags
+    message.required_engine_state  = std::to_integer<uint16_t>(enc_mes[6] >> 0) & 0x01u;
+    message.open_rear_ramp         = std::to_integer<uint16_t>(enc_mes[6] >> 1) & 0x01u;
+    message.close_rear_ramp        = std::to_integer<uint16_t>(enc_mes[6] >> 2) & 0x01u;
+    message.required_horn_state    = std::to_integer<uint16_t>(enc_mes[6] >> 3) & 0x01u;
+    message.required_smoke_state   = std::to_integer<uint16_t>(enc_mes[6] >> 4) & 0x01u;
+    message.lights_low_beams       = std::to_integer<uint16_t>(enc_mes[6] >> 5) & 0x01u;
+    message.lights_high_beams      = std::to_integer<uint16_t>(enc_mes[6] >> 6) & 0x01u;
+    message.lights_cat_eyes        = std::to_integer<uint16_t>(enc_mes[6] >> 7) & 0x01u;
+
+    message.brake_light_allowed    = std::to_integer<uint16_t>(enc_mes[7] >> 0) & 0x01u;
+    message.fnr_forward_cmd        = std::to_integer<uint16_t>(enc_mes[7] >> 1) & 0x01u;
+    message.fnr_neutral_cmd        = std::to_integer<uint16_t>(enc_mes[7] >> 2) & 0x01u;
+    message.fnr_reverse_cmd        = std::to_integer<uint16_t>(enc_mes[7] >> 3) & 0x01u;
+    message.engine_on_override     = std::to_integer<uint16_t>(enc_mes[7] >> 4) & 0x01u; 
+}
+
+
