@@ -30,7 +30,31 @@ enum drive_operation {
     FORWARD_CMD,
     NATURAL_CMD,
     REVERSE_CMD,
-    ON_OVERRIDE
+    ON_OVERRIDE,
+    MESSAGE_COUNTER
+};
+
+
+enum status_operation{
+
+    STATUS_THROTTLE_VECTOR = 1,
+    STATUS_STEER_VECTOR,
+    STATUS_BRAKE_VECTOR,
+    STATUS_ENGINE_STATE,
+    STATUS_RAMP_STATE,
+    STATUS_HORN_STATE,
+    STATUS_SMOKE_STATE,
+    STATUS_LOW_BEAM,
+    STATUS_HIGH_BEAM,
+    STATUS_CAT_EYES,
+    STATUS_BRAKE_ALLOWANCE,
+    STATUS_FORWARD_STATE,
+    STATUS_NATURAL_STATE,
+    STATUS_REVERSE_STATE,
+    STATUS_UNMANNED_STATE,
+    STATUS_ESTOP1_ALIVE,
+    STATUS_ESTOP2_ALIVE,
+    STATUS_MESSAGE_COUNTER
 };
 
 
@@ -86,7 +110,7 @@ struct PLATFORM1_LTH
     std::uint16_t estop1_alive       : 1;   // 0..1
     std::uint16_t estop2_alive       : 1;   // 0..1
 
-    std::uint8_t  message_counter;          // 0..255
+    std::uint8_t  message_counter;         // 0..255
 };
 
 static_assert(sizeof(PLATFORM1_LTH) == 8, "PLATFORM1_LTH must be 8 bytes");
@@ -98,19 +122,37 @@ class DRIVE_CMD
 {
 public:
     DRIVE_CMD(/* args */);
-    ~DRIVE_CMD();
+    ~DRIVE_CMD(); 
 
-    void print();   // done
+    void print();   // print internal struct
     void init();    // what are we initializing 
-    int get(int request);     // get message? get struct? - bool for seccussfull execution
-    bool set();     // set a new message or a small portion - bool for seccussfull execution
-    std::array<std::byte,8> encode();
-    void decode (std::array<std::byte,8>);
+    int get(const int request);     // get message? get struct? --- get the requsted var - bool for seccussfull execution
+    bool set();     // set a new message via keyboard input - bool for seccussfull execution
+    std::array<std::byte,9> encode();
+    void decode (const std::array<std::byte,9> &enc_mes);
 private:
     
     DRIVE_CMD_HTL message {};
 
 };
+
+ class PLATFORM_STATUS
+{
+public:
+    PLATFORM_STATUS();
+    ~PLATFORM_STATUS();
+
+    void print();                                           // print internal struct
+    void init();                        
+    int get(const int request);                             // get the requested value
+    bool set();                                             // set a new message via keyboard input - bool for seccussfull execution
+    std::array<std::byte,9> encode();                       // encode struct into byte array
+    void decode (const std::array<std::byte,8> &enc_mes);   // decode from byte array to struct
+private: 
+    PLATFORM1_LTH message {};
+
+};
+
 
 
 
