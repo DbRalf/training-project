@@ -148,9 +148,9 @@ int DRIVE_CMD::get(const int request){
 }
 
 
-std::array<std::byte,9> DRIVE_CMD::encode(){
+std::array<std::byte,8> DRIVE_CMD::encode(){
 
-    std::array<std::byte,9> out {}; // the return array
+    std::array<std::byte,8> out {}; // the return array
     
     // ------------ convert to byte array ------------
     // format: litlle endian
@@ -161,9 +161,8 @@ std::array<std::byte,9> DRIVE_CMD::encode(){
     out[3] = static_cast<std::byte>(message.steer_vector    >> 8 & 0xFF);
 
     out[4] = static_cast<std::byte>(message.brake_vector         & 0xFF);
-    out[5] = static_cast<std::byte>(message.brake_vector    >> 8 & 0xFF);
     
-    out[6] = static_cast<std::byte>(
+    out[5] = static_cast<std::byte>(
              ((message.required_engine_state & 1) << 0) |
              ((message.open_rear_ramp        & 1) << 1) |
              ((message.close_rear_ramp       & 1) << 2) |
@@ -174,7 +173,7 @@ std::array<std::byte,9> DRIVE_CMD::encode(){
              ((message.lights_cat_eyes       & 1) << 7)
             );
     
-    out[7] = static_cast<std::byte>(
+    out[6] = static_cast<std::byte>(
              ((message.brake_light_allowed   & 1) << 0) |
              ((message.fnr_forward_cmd       & 1) << 1) |
              ((message.fnr_neutral_cmd       & 1) << 2) |
@@ -182,13 +181,13 @@ std::array<std::byte,9> DRIVE_CMD::encode(){
              ((message.engine_on_override    & 1) << 4)
             );   
     
-    out[8] = static_cast<std::byte> (message.message_counter     & 0xFF);
+    out[7] = static_cast<std::byte> (message.message_counter     & 0xFF);
 
     return out;
 }
 
 
-void DRIVE_CMD::decode (const std::array<std::byte,9> &enc_mes){
+void DRIVE_CMD::decode (const std::array<std::byte,8> &enc_mes){
 
     // decode little endian
     message.throttle_vector = (std::to_integer<uint16_t>(enc_mes[0])) | (std::to_integer<uint16_t>(enc_mes[1]) << 8);
@@ -293,14 +292,65 @@ int PLATFORM_STATUS::get(const int request){
 
     
 bool PLATFORM_STATUS::set(){
+
+    // ========= DEMO ========= //
+    message.throttle_vector += 1 ;
+    message.steer_vector += 1 ;
+    message.brake_vector += 1 ;
+    message.engine_state = !message.engine_state;
+    message.rear_ramp_state = !message.rear_ramp_state;
+    message.horn_state = !message.horn_state;
+    message.smoke_state = !message.smoke_state;
+    message.lights_low_beams = !message.lights_low_beams;
+    message.lights_high_beams = !message.lights_high_beams;
+    message.lights_cat_eyes = !message.lights_cat_eyes;
+    message.lights_cat_eyes = !message.lights_cat_eyes;
+    message.brake_allowance = !message.brake_allowance;
+    message.fnr_forward_state = !message.fnr_forward_state;
+    message.fnr_neutral_state = !message.fnr_neutral_state;
+    message.fnr_reverse_state = !message.fnr_reverse_state;
+    message.unmanned_state = !message.unmanned_state;
+    message.estop1_alive = !message.estop1_alive;
+    message.estop2_alive = !message.estop2_alive;
+    message.message_counter += 1;
+
+    return true;
     
-    return 0;
 }    
 
 
-std::array<std::byte,9> PLATFORM_STATUS::encode(){
-    std::array<std::byte,9> out {};
+std::array<std::byte,8> PLATFORM_STATUS::encode(){
+    std::array<std::byte,8> out {};
+    // encode uint16 into byte
+    out[0] = static_cast<std::byte>(message.throttle_vector        & 0xFF);
+    out[1] = static_cast<std::byte>(message.throttle_vector   >> 8 & 0xFF);
 
+    out[2] = static_cast<std::byte>(message.steer_vector           & 0xFF);
+    out[3] = static_cast<std::byte>(message.steer_vector      >> 8 & 0xFF);
+
+    // encode uint8 into byte
+    out[4] = static_cast<std::byte>(message.brake_vector           & 0xFF);
+
+    // encode flags , and bibit flags
+    out[5] = static_cast<std::byte>(((message.engine_state       & 0x03) << 0) |
+                                    ((message.rear_ramp_state    & 0x03) << 2) |
+                                    ((message.horn_state         & 0x01) << 4) |
+                                    ((message.smoke_state        & 0x01) << 5) |
+                                    ((message.lights_low_beams   & 0x01) << 6) |
+                                    ((message.lights_high_beams  & 0x01) << 7) 
+    );
+   
+    out[6] = static_cast<std::byte> (((message.lights_cat_eyes    & 0x01) << 0) |
+                                    ((message.brake_allowance    & 0x01) << 1) |
+                                    ((message.fnr_forward_state  & 0x01) << 2) |
+                                    ((message.fnr_neutral_state  & 0x01) << 3) |
+                                    ((message.fnr_reverse_state  & 0x01) << 4) |
+                                    ((message.unmanned_state     & 0x01) << 5) |
+                                    ((message.estop1_alive       & 0x01) << 6) |
+                                    ((message.estop2_alive       & 0x01) << 7) 
+    ); 
+
+    out[7] = static_cast<std::byte> (message.message_counter       & 0xFF);
 
     return out;
 }     
@@ -308,5 +358,5 @@ std::array<std::byte,9> PLATFORM_STATUS::encode(){
 
 void PLATFORM_STATUS::decode(const std::array<std::byte,8> &enc_mes){
     
-
+    
 }

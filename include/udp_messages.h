@@ -118,7 +118,7 @@ static_assert(sizeof(PLATFORM1_LTH) == 8, "PLATFORM1_LTH must be 8 bytes");
 #pragma pack(pop)
 
 
-class DRIVE_CMD
+ class DRIVE_CMD
 {
 public:
     DRIVE_CMD(/* args */);
@@ -128,13 +128,15 @@ public:
     void init();    // what are we initializing 
     int get(const int request);     // get message? get struct? --- get the requsted var - bool for seccussfull execution
     bool set();     // set a new message via keyboard input - bool for seccussfull execution
-    std::array<std::byte,9> encode();
-    void decode (const std::array<std::byte,9> &enc_mes);
-private:
-    
+    std::array<std::byte,8> encode();
+    void decode (const std::array<std::byte,8> &enc_mes);
+
+private: 
     DRIVE_CMD_HTL message {};
 
 };
+
+
 
  class PLATFORM_STATUS
 {
@@ -146,8 +148,9 @@ public:
     void init();                        
     int get(const int request);                             // get the requested value
     bool set();                                             // set a new message via keyboard input - bool for seccussfull execution
-    std::array<std::byte,9> encode();                       // encode struct into byte array
-    void decode (const std::array<std::byte,8> &enc_mes);   // decode from byte array to struct
+    std::array<std::byte,8> encode();                       // encode internal struct into byte array
+    void decode (const std::array<std::byte,8> &enc_mes);   // decode from byte array to struct internal
+
 private: 
     PLATFORM1_LTH message {};
 
