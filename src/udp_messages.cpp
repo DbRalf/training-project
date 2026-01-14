@@ -192,25 +192,25 @@ void DRIVE_CMD::decode (const std::array<std::byte,8> &enc_mes){
     // decode little endian
     message.throttle_vector = (std::to_integer<uint16_t>(enc_mes[0])) | (std::to_integer<uint16_t>(enc_mes[1]) << 8);
     message.steer_vector    = (std::to_integer<uint16_t>(enc_mes[2])) | (std::to_integer<uint16_t>(enc_mes[3]) << 8);
-    message.brake_vector    = (std::to_integer<uint16_t>(enc_mes[4])) | (std::to_integer<uint16_t>(enc_mes[5]) << 8);
+    message.brake_vector    = (std::to_integer<uint16_t>(enc_mes[4]));
 
     // decode bit flags
-    message.required_engine_state  = std::to_integer<uint16_t>(enc_mes[6] >> 0) & 0x01u;
-    message.open_rear_ramp         = std::to_integer<uint16_t>(enc_mes[6] >> 1) & 0x01u;
-    message.close_rear_ramp        = std::to_integer<uint16_t>(enc_mes[6] >> 2) & 0x01u;
-    message.required_horn_state    = std::to_integer<uint16_t>(enc_mes[6] >> 3) & 0x01u;
-    message.required_smoke_state   = std::to_integer<uint16_t>(enc_mes[6] >> 4) & 0x01u;
-    message.lights_low_beams       = std::to_integer<uint16_t>(enc_mes[6] >> 5) & 0x01u;
-    message.lights_high_beams      = std::to_integer<uint16_t>(enc_mes[6] >> 6) & 0x01u;
-    message.lights_cat_eyes        = std::to_integer<uint16_t>(enc_mes[6] >> 7) & 0x01u;
+    message.required_engine_state  = std::to_integer<uint16_t>(enc_mes[5] >> 0) & 0x01u;
+    message.open_rear_ramp         = std::to_integer<uint16_t>(enc_mes[5] >> 1) & 0x01u;
+    message.close_rear_ramp        = std::to_integer<uint16_t>(enc_mes[5] >> 2) & 0x01u;
+    message.required_horn_state    = std::to_integer<uint16_t>(enc_mes[5] >> 3) & 0x01u;
+    message.required_smoke_state   = std::to_integer<uint16_t>(enc_mes[5] >> 4) & 0x01u;
+    message.lights_low_beams       = std::to_integer<uint16_t>(enc_mes[5] >> 5) & 0x01u;
+    message.lights_high_beams      = std::to_integer<uint16_t>(enc_mes[5] >> 6) & 0x01u;
+    message.lights_cat_eyes        = std::to_integer<uint16_t>(enc_mes[5] >> 7) & 0x01u;
 
-    message.brake_light_allowed    = std::to_integer<uint16_t>(enc_mes[7] >> 0) & 0x01u;
-    message.fnr_forward_cmd        = std::to_integer<uint16_t>(enc_mes[7] >> 1) & 0x01u;
-    message.fnr_neutral_cmd        = std::to_integer<uint16_t>(enc_mes[7] >> 2) & 0x01u;
-    message.fnr_reverse_cmd        = std::to_integer<uint16_t>(enc_mes[7] >> 3) & 0x01u;
-    message.engine_on_override     = std::to_integer<uint16_t>(enc_mes[7] >> 4) & 0x01u; 
+    message.brake_light_allowed    = std::to_integer<uint16_t>(enc_mes[6] >> 0) & 0x01u;
+    message.fnr_forward_cmd        = std::to_integer<uint16_t>(enc_mes[6] >> 1) & 0x01u;
+    message.fnr_neutral_cmd        = std::to_integer<uint16_t>(enc_mes[6] >> 2) & 0x01u;
+    message.fnr_reverse_cmd        = std::to_integer<uint16_t>(enc_mes[6] >> 3) & 0x01u;
+    message.engine_on_override     = std::to_integer<uint16_t>(enc_mes[6] >> 4) & 0x01u; 
     // decode byte
-    message.message_counter        = std::to_integer<uint8_t>(enc_mes[8]);
+    message.message_counter        = std::to_integer<uint8_t>(enc_mes[7]);
 }
 
 
@@ -332,7 +332,7 @@ std::array<std::byte,8> PLATFORM_STATUS::encode(){
     out[4] = static_cast<std::byte>(message.brake_vector           & 0xFF);
 
     // encode flags , and bibit flags
-    out[5] = static_cast<std::byte>(((message.engine_state       & 0x03) << 0) |
+    out[5] = static_cast<std::byte>(((message.engine_state       & 0x03) << 0) | // 0x03 for 0000 0011
                                     ((message.rear_ramp_state    & 0x03) << 2) |
                                     ((message.horn_state         & 0x01) << 4) |
                                     ((message.smoke_state        & 0x01) << 5) |
@@ -358,5 +358,25 @@ std::array<std::byte,8> PLATFORM_STATUS::encode(){
 
 void PLATFORM_STATUS::decode(const std::array<std::byte,8> &enc_mes){
     
+    message.throttle_vector   = (std::to_integer<uint16_t>(enc_mes[0])) | (std::to_integer<uint16_t>(enc_mes[1]) << 8);
+    message.steer_vector      = (std::to_integer<uint16_t>(enc_mes[2])) | (std::to_integer<uint16_t>(enc_mes[3]) << 8);
+    message.brake_vector      = (std::to_integer<uint16_t>(enc_mes[4]));
+
+    message.engine_state      = std::to_integer<uint16_t>(enc_mes[5] >> 0) & 0x03u; // 0x03 for 0000 0011
+    message.rear_ramp_state   = std::to_integer<uint16_t>(enc_mes[5] >> 2) & 0x03u;    
+    message.horn_state        = std::to_integer<uint16_t>(enc_mes[5] >> 4) & 0x01u;
+    message.smoke_state       = std::to_integer<uint16_t>(enc_mes[5] >> 5) & 0x01u;
+    message.lights_low_beams  = std::to_integer<uint16_t>(enc_mes[5] >> 6) & 0x01u;
+    message.lights_high_beams = std::to_integer<uint16_t>(enc_mes[5] >> 7) & 0x01u;
+
+    message.lights_cat_eyes   = std::to_integer<uint16_t>(enc_mes[6] >> 0) & 0x01u;
+    message.brake_allowance   = std::to_integer<uint16_t>(enc_mes[6] >> 1) & 0x01u;    
+    message.fnr_forward_state = std::to_integer<uint16_t>(enc_mes[6] >> 2) & 0x01u;
+    message.fnr_neutral_state = std::to_integer<uint16_t>(enc_mes[6] >> 3) & 0x01u;
+    message.fnr_neutral_state = std::to_integer<uint16_t>(enc_mes[6] >> 4) & 0x01u;
+    message.unmanned_state    = std::to_integer<uint16_t>(enc_mes[6] >> 5) & 0x01u;
+    message.estop1_alive      = std::to_integer<uint16_t>(enc_mes[6] >> 6) & 0x01u;
+    message.estop2_alive      = std::to_integer<uint16_t>(enc_mes[6] >> 7) & 0x01u;
     
 }
+
