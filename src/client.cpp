@@ -18,7 +18,7 @@ int main (){
         if(!drive.set()) break; // waits 1 sec for input (no input -> continue)
         mes = drive.encode();
 
-        std::cout << "======SENT MESSAGE======\n";
+        std::cout << "\n======SENT MESSAGE======\n";
         drive.print();
         // std::system("clear");
 

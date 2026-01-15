@@ -19,7 +19,7 @@ int main (){
     while(server_t.recb(&mes)){
 
         platform.decode(mes);
-        std::cout << "======RECIVED MESSAGE======\n";
+        std::cout << "\n======RECIVED MESSAGE======\n";
         platform.print();
 
     }

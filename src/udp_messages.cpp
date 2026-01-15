@@ -216,8 +216,6 @@ void DRIVE_CMD::decode (const std::array<std::byte,8> &enc_mes){
 
 
 
-
-
 PLATFORM_STATUS::PLATFORM_STATUS()
 {
     message = {};
@@ -373,7 +371,7 @@ void PLATFORM_STATUS::decode(const std::array<std::byte,8> &enc_mes){
     message.brake_allowance   = std::to_integer<uint16_t>(enc_mes[6] >> 1) & 0x01u;    
     message.fnr_forward_state = std::to_integer<uint16_t>(enc_mes[6] >> 2) & 0x01u;
     message.fnr_neutral_state = std::to_integer<uint16_t>(enc_mes[6] >> 3) & 0x01u;
-    message.fnr_neutral_state = std::to_integer<uint16_t>(enc_mes[6] >> 4) & 0x01u;
+    message.fnr_reverse_state = std::to_integer<uint16_t>(enc_mes[6] >> 4) & 0x01u;
     message.unmanned_state    = std::to_integer<uint16_t>(enc_mes[6] >> 5) & 0x01u;
     message.estop1_alive      = std::to_integer<uint16_t>(enc_mes[6] >> 6) & 0x01u;
     message.estop2_alive      = std::to_integer<uint16_t>(enc_mes[6] >> 7) & 0x01u;
