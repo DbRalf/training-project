@@ -18,8 +18,8 @@
 
         bool open();                 // create socket
         void close();                // close socket
-        bool send(const void* data, size_t len);
-        ssize_t recb(void* buffer, size_t len);
+        bool send(const std::array <std::byte, 8>* data);
+        bool recb(std::array <std::byte, 8>* buffer);
 
     private:
         int m_fd;                    // socket file descriptor

@@ -103,13 +103,15 @@ void UdpSocket::close(){
 }
 
 
-ssize_t UdpSocket::recb(void* buffer, size_t len){
+bool UdpSocket::recb(std::array <std::byte, 8>* buffer){
 
     if(!m_open){
         std::cerr <<"socket isn't open\n";
-        return -1;
+        return false;
     }
 
+
+    size_t len = 8;                                     // static size 
     sockaddr_in sender {};
     socklen_t sender_len = sizeof(sender);
 
@@ -133,13 +135,13 @@ ssize_t UdpSocket::recb(void* buffer, size_t len){
 
     }
 
-    return recvd;                                       // return the bytes reciced  
+    return static_cast<size_t>(recvd) == len;           // all bytes recuved  
                                                         
 }   
 
 
 
-bool UdpSocket::send(const void* data, size_t len){
+bool UdpSocket::send(const std::array <std::byte, 8>* data){
 
     if(!m_open){
         std::cerr << "the socket is not open\n";
@@ -147,8 +149,10 @@ bool UdpSocket::send(const void* data, size_t len){
     }
 
     if(!m_dest_set) return false; 
-
+    
+    size_t len = 8;
     socklen_t dest_len = sizeof(m_dest);
+
     ssize_t sendb = sendto(                             // send byts
             m_fd,                                       // socket
             data,                                       // message in bytes

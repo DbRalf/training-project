@@ -126,7 +126,8 @@ public:
 
     void print();   // print internal struct
     void init();    // what are we initializing 
-    int get(const int request);     // get message? get struct? --- get the requsted var - bool for seccussfull execution
+    //int get(const int request);     // get message? get struct? --- get the requsted var - bool for seccussfull execution
+    int get(const int request);
     bool set();     // set a new message via keyboard input - bool for seccussfull execution
     std::array<std::byte,8> encode();
     void decode (const std::array<std::byte,8> &enc_mes);
@@ -147,7 +148,7 @@ public:
     void print();                                           // print internal struct
     void init();                        
     int get(const int request);                             // get the requested value
-    bool set();                                             // set a new message via keyboard input - bool for seccussfull execution
+    bool set();                                             // set a new message via keyboard input - bool for seccussfull execution // should be set from the recoved message
     std::array<std::byte,8> encode();                       // encode internal struct into byte array
     void decode (const std::array<std::byte,8> &enc_mes);   // decode from byte array to struct internal
 

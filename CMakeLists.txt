@@ -17,9 +17,9 @@ target_include_directories(udp_messages PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inclu
 add_executable(main src/main.cpp)
 target_link_libraries(main PRIVATE udp_messages keyboard_input udp_socket)
 
-add_executable(server_test server_test.cpp)
-target_link_libraries(server_test PRIVATE udp_socket)
+add_executable(server_test src/server.cpp)
+target_link_libraries(server_test PRIVATE udp_socket udp_messages keyboard_input)
 
-add_executable(client_test client_test.cpp)
-target_link_libraries(client_test PRIVATE udp_socket)
+add_executable(client_test src/client.cpp)
+target_link_libraries(client_test PRIVATE udp_socket udp_messages keyboard_input)
 

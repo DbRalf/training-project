@@ -28,8 +28,8 @@ char keyboard_input::get_input(){
 
     // timeval sets time to wait for select
     timeval tv{};                                               // create struct of timeval
-    tv.tv_sec = 0;                                              // set second to timeout
-    tv.tv_usec = 50000;                                           // set microsecond to timeout
+    tv.tv_sec = 1;                                              // set second to timeout
+    tv.tv_usec = 0;                                           // set microsecond to timeout
  
     // first parm - is the last file descriptor +1
     int ready = select(STDIN_FILENO + 1, &readfds, nullptr, nullptr, &tv);

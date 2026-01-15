@@ -377,6 +377,8 @@ void PLATFORM_STATUS::decode(const std::array<std::byte,8> &enc_mes){
     message.unmanned_state    = std::to_integer<uint16_t>(enc_mes[6] >> 5) & 0x01u;
     message.estop1_alive      = std::to_integer<uint16_t>(enc_mes[6] >> 6) & 0x01u;
     message.estop2_alive      = std::to_integer<uint16_t>(enc_mes[6] >> 7) & 0x01u;
+
+    message.message_counter   = std::to_integer<uint16_t>(enc_mes[7]);
     
 }
 

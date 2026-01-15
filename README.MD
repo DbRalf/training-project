@@ -41,5 +41,7 @@ Implement the UDP Interface for data and commands according to M113 G12 Platform
 
 
  ## example
-
- ./ still no examples :)
+run in 2 seperate terminals from the build directory after build:
+    - ./server_test
+    - ./client_test
+the client sends the message and server recives
