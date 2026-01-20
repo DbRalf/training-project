@@ -28,7 +28,7 @@ char keyboard_input::get_input(){
 
     // timeval sets time to wait for select
     timeval tv{};                                               // create struct of timeval
-    tv.tv_sec = 1;                                              // set second to timeout
+    tv.tv_sec = 2;                                              // set second to timeout
     tv.tv_usec = 0;                                           // set microsecond to timeout
  
     // first parm - is the last file descriptor +1

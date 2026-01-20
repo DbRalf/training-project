@@ -128,7 +128,7 @@ public:
     void init();    // what are we initializing 
     //int get(const int request);     // get message? get struct? --- get the requsted var - bool for seccussfull execution
     int get(const int request);
-    bool set();     // set a new message via keyboard input - bool for seccussfull execution
+    bool set(char key);     // set a new message via keyboard input - bool for seccussfull execution
     std::array<std::byte,8> encode();
     void decode (const std::array<std::byte,8> &enc_mes);
 

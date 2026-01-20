@@ -43,11 +43,9 @@ void DRIVE_CMD::print()
 }
 
 // set a sew value in the struct based on keyboard input
-bool DRIVE_CMD::set(){
+bool DRIVE_CMD::set(char key){
 
-    keyboard_input ter1;
-
-    char key = ter1.get_input();
+    
     switch (key)
     {
     case 'w':
